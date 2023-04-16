@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+	{% for subject in context["subject_chapter_mapping"] %}
+		{{subject}}
+
+		<ul>
+			{% for chapter  in context["subject_chapter_mapping"][subject]%}
+			<li>  <a href="/{{ subject.slug }}/{{ chapter.slug }}/quiz"> {{chapter}} </a>	 </li>
+			{% endfor %}
+
+		</ul>
+
+
+	{% endfor %}
+
+
+{% endblock body %}

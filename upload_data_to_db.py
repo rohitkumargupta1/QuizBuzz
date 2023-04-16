@@ -1,7 +1,7 @@
 import json
 from models import *
 from slugify import slugify
-with open('static/lr.json', 'r') as f:
+with open('static/sample_indiabix.json', 'r') as f:
     data = json.load(f)
 
     
@@ -35,14 +35,11 @@ for i in data:
             question = Question(question = i["question"], chapter_id = chapter.id, explanation =  i["explanation"] if i["explanation"] else None)
             db.session.add(question)
             db.session.commit()
-        else:
-            question = question[0]
         
-
-        for j in i["choices"]:
-            choice = Choice(choice = j, question_id = question.id, is_correct = i["answer"] == j)   
-            db.session.add(choice)
-            db.session.commit()
+            for j in i["choices"]:
+                choice = Choice(choice = j, question_id = question.id, is_correct = i["answer"] == j)   
+                db.session.add(choice)
+                db.session.commit()
     
     except KeyError as k:
         print("Error!!!!!!!!!: " , k, "not found.")

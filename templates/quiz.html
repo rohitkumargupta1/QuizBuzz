@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block style %}
+	<style>
+		.question{
+			display: none;
+		}
+		.question.active{
+			display:block;
+		}
+	</style>
+{% endblock style %}
+
+{% block body %}
+{% for question in context %}
+<div id="{{question.id}}" class="question">
+	{{loop.index}}. {{question}} <br>
+	{% for choice in question.choices %}
+	<input type="radio" name="{{question.id}}" value="{{choice}}"> {{choice}} <br>
+	{% endfor %}
+</div>
+{% endfor %}
+<br>
+
+<input type="button" onclick="previousQuestion()" id="previous-btn" value="Previous">
+<input type="button" onclick="nextQuestion()" id="next-btn" value="Next">
+
+{% endblock body %}
+
+
+{% block script %}
+
+<script>
+	document.getElementsByClassName("question")[0].className += " active";
+	function nextQuestion(){
+		var currentQuestion = window.document.getElementsByClassName("question active")[0]
+		if (currentQuestion.nextElementSibling.className=="question"){
+			currentQuestion.className = "question"
+			currentQuestion.nextElementSibling.className = "question active"
+		}
+		
+	}
+
+	function previousQuestion(){
+		var currentQuestion = window.document.getElementsByClassName("question active")[0]
+		if (currentQuestion.previousElementSibling.className=="question"){
+		currentQuestion.className = "question"
+		currentQuestion.previousElementSibling.className = "question active"
+		}
+	}
+</script>
+
+{% endblock script %}
