@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block style %}
+<style>
+	.card-header{
+		background-color: #737FE1;
+		color: #ffffff;
+	}
+	
+	
+</style>
+{% endblock style %}
+
+
+
+{% block body %}
+
+
+
+
+
+<div class="container mt-5 col-md-6">
+	
+	{% for question in context.questions %}
+	
+	<div id="{{question.id}}" class="card question my-4">
+	
+	
+
+		<div class="card-header">
+			<h4> {{loop.index}}. {{question}} </h4>
+
+		</div>
+		<div class="card-body">
+			<div class="card-text">
+				
+				{% for choice in question.choices %}
+				
+					{% if choice.id in context.usersChoicesId %}
+						{% if choice.id == question.getAnswer().id %}
+
+							<p class="bg-success p-2 text-white"><strong>{{choice}}</strong></p>
+							
+						{% else %} 
+							<p class="bg-danger p-2 text-white"><strong>{{choice}}</strong></p>
+						{% endif %}
+					{% else %}
+
+						{% if choice.id == question.getAnswer().id %}
+							{% if question.id in context.usersQuestionsId %}
+							<p class="bg-success p-2 text-white"><strong>{{choice}}</strong></p>
+							{% else %}
+							<p class="bg-warning p-2 text-white"><strong>{{choice}}</strong></p>
+							{% endif %}
+						{% else %} 
+							<p class="p-2 bg-light"><strong>{{choice}}</strong></p>
+						{% endif %}
+					{% endif %}
+	
+					
+				{% endfor %}
+				
+
+				
+				
+			</div>
+		</div>
+
+	
+	</div>
+
+
+	
+	{% endfor %}
+
+	<div class="container mt-5 col-md-8">
+		<h2 class="card-header text-center" style ="color: #ffffff; background-color: #737FE1;"> Result = {{context.score}} </h2>
+		<br>
+		<canvas id="myChart" ></canvas>
+	
+	</div>
+	
+	
+
+</div>
+
+
+
+
+
+
+
+{% endblock body %}
+	
+
+
+
+
+{% block script %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+	var data = {{context.data}};
+	var ctx = document.getElementById('myChart').getContext('2d');
+	var myChart = new Chart(ctx, {
+	    type: 'pie',
+	    data: {
+		  labels: ['Correct', 'In-Correct',"Un-Attempted"],
+		  datasets: [{
+			label: 'questions',
+			data: data,
+			backgroundColor: [
+			    'green',
+			    'red',
+			    'yellow'
+			   
+			],
+			borderColor: [
+			    '#2E2153',
+			    '#2E2153',
+			    '#2E2153'
+			],
+			borderWidth: 0
+		  }]
+	    },
+	    options: {
+		  scales: {
+			y: {
+			    beginAtZero: true
+			}
+		  }
+	    }
+	});
+  </script>
+  
+     
+{% endblock %}
+
+

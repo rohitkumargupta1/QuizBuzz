@@ -1,19 +1,51 @@
 {% extends 'base.html' %}
 
+
+{% block style %}
+<style>
+	.card-header{
+		background-color: #737FE1;
+		color: #ffffff;
+	}
+	
+</style>
+{% endblock style %}
+
+
+
 {% block body %}
 
-	{% for subject in context["subject_chapter_mapping"] %}
-		{{subject}}
 
-		<ul>
-			{% for chapter  in context["subject_chapter_mapping"][subject]%}
-			<li>  <a href="/{{ subject.slug }}/{{ chapter.slug }}/quiz"> {{chapter}} </a>	 </li>
-			{% endfor %}
-
-		</ul>
-
-
+<!--  simply fetch data from db and display [Logic]
+{% for subject in context["subject_chapter_mapping"] %}
+{{subject}}
+<ul>
+	{% for chapter in context["subject_chapter_mapping"][subject]%}
+	<li> <a href="/{{ subject.slug }}/{{ chapter.slug }}/quiz"> {{chapter}} </a> </li>
 	{% endfor %}
+</ul>
+{% endfor %}
+-->
+
+
+<div class="card-columns mt-4 col-md-10 mx-auto">
+	{% for subject in context["subject_chapter_mapping"] %}
+		<div class="card">
+			<div class="card-header">
+				<h5 class="card-title">{{subject}}</h5>
+			</div>
+			<div class="card-body">
+				<ul>
+					{% for chapter in context["subject_chapter_mapping"][subject]%}
+					<li> <a href="/{{ subject.slug }}/{{ chapter.slug }}/quiz"> {{chapter}} </a> </li>
+					{% endfor %}
+				</ul>
+			</div>
+		</div>
+	{% endfor %}
+</div>
+
+
 
 
 {% endblock body %}

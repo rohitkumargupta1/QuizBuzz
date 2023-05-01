@@ -1,53 +1,116 @@
 {% extends 'base.html' %}
 
 {% block style %}
-	<style>
-		.question{
-			display: none;
-		}
-		.question.active{
-			display:block;
-		}
-	</style>
+<style>
+	.question {
+		display: none;
+	}
+
+	.question.active {
+		display: block;
+	}
+
+	.btn {
+		background-color: #2E2153;
+	}
+
+	.btn:hover {
+		background-color: #737FE1;
+	}
+
+	.card-header {
+		background-color: #737FE1;
+		color: #ffffff;
+	}
+</style>
 {% endblock style %}
 
-{% block body %}
-{% for question in context %}
-<div id="{{question.id}}" class="question">
-	{{loop.index}}. {{question}} <br>
-	{% for choice in question.choices %}
-	<input type="radio" name="{{question.id}}" value="{{choice}}"> {{choice}} <br>
-	{% endfor %}
-</div>
-{% endfor %}
-<br>
 
-<input type="button" onclick="previousQuestion()" id="previous-btn" value="Previous">
-<input type="button" onclick="nextQuestion()" id="next-btn" value="Next">
+
+{% block body %}
+
+
+<div class="container mt-5 col-md-8">
+
+	<form action="/{{subject_slug}}/{{chapter_slug}}/quiz/answer/{{quizNumber}}" method="post">
+		{% for question in context %}
+
+		<div id="{{question.id}}" class="card question">
+
+			<div class="card-header">
+				<h4> {{loop.index}}. {{question}} </h4>
+
+			</div>
+			<div class="card-body">
+				<p class="card-text">
+					{% for choice in question.choices %}
+					<label class="w-100 border-bottom">
+					<input type="radio" class="my-4 radio" name="{{question.id}}" value="{{choice.id}}"> <span
+						style="font-size: large;"> {{choice}} </span> 
+					</label> <br>
+					{% endfor %}
+				</p>
+				
+			</div>
+
+			<div class="card-footer d-flex justify-content-between">
+				<input type="button" onclick="previousQuestion()" value="Previous" class="btn btn-info">
+				{% if loop.last %}
+				<input type="button" onclick="submit()" value="Submit" class="btn btn-info">
+				{% endif %}
+				<input type="button" onclick="nextQuestion()" value="Next" class="btn btn-info">
+
+			</div>
+
+		</div>
+		{% endfor %}
+
+	</form>
+	
+	<form method="get">
+	<div class="container d-flex justify-content-start mt-4">
+		{% for i in range(numberOfQuiz) %}	
+			<input type="submit" value="Quiz{{i+1}}" name="quizNumber" class="btn btn-info mr-2">
+		{% endfor %}
+	</div>
+	</form>
+
+
+	
+	    
+
+
+
+</div>
 
 {% endblock body %}
 
 
-{% block script %}
 
+{% block script %}
 <script>
-	document.getElementsByClassName("question")[0].className += " active";
-	function nextQuestion(){
-		var currentQuestion = window.document.getElementsByClassName("question active")[0]
-		if (currentQuestion.nextElementSibling.className=="question"){
-			currentQuestion.className = "question"
-			currentQuestion.nextElementSibling.className = "question active"
+
+
+	document.getElementsByClassName("card question")[0].className += " active";
+
+	function nextQuestion() {
+		var currentQuestion = window.document.getElementsByClassName("card question active")[0]
+		if (currentQuestion.nextElementSibling.className == "card question") {
+			currentQuestion.className = "card question"
+			currentQuestion.nextElementSibling.className = "card question active"
 		}
-		
 	}
 
-	function previousQuestion(){
-		var currentQuestion = window.document.getElementsByClassName("question active")[0]
-		if (currentQuestion.previousElementSibling.className=="question"){
-		currentQuestion.className = "question"
-		currentQuestion.previousElementSibling.className = "question active"
+	function previousQuestion() {
+		var currentQuestion = window.document.getElementsByClassName("card question active")[0]
+		if (currentQuestion.previousElementSibling.className == "card question") {
+			currentQuestion.className = "card question"
+			currentQuestion.previousElementSibling.className = "card question active"
 		}
+	}
+
+	function submit() {
+
 	}
 </script>
-
 {% endblock script %}
