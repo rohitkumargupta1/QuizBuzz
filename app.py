@@ -1,13 +1,15 @@
 from flask import Flask
 from routes import *
 from extensions import db
+import os
 
 app = Flask(__name__)
 app.secret_key = 'secret_key'
 
 
 # db connection [Postgresql]
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:password@localhost/flasksql'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:password@localhost/flasksql'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ["DATABASE_URL"]
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 
