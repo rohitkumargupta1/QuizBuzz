@@ -64,7 +64,7 @@ def loginRequired(func):
         if username:
             return func(*args, **kwargs)
         else:
-            return redirect("/admin/")
+            return redirect("/admin/login/")
     return inner
 
 

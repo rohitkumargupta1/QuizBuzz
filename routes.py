@@ -13,6 +13,7 @@ adminLoginBp = Blueprint('adminLoginBp', __name__)
 adminLogoutBp = Blueprint('adminLogoutBp', __name__)
 deleteQuestionsBp = Blueprint('deleteQuestionsBp', __name__)
 updateAdminBp = Blueprint('updateAdminBp', __name__)
+adminPanelBp = Blueprint('adminPanelBp', __name__)
 
 
 # Home Page [Default] | Listing all Subject & Chapter
@@ -138,14 +139,10 @@ def quizAnswersOnSubmit(subject_slug, chapter_slug):
     return render_template("quizAnswersOnSubmit.html", context=context)
 
 
-
-# Admin Login Page [with session]
-@adminLoginBp.route('/admin/', methods=['GET', 'POST'])
-def adminLogin():
-    # try:
-         # if admin already in session 
-    if "username" in session:
-        print("Session #############################")
+@adminPanelBp.route('/admin/', methods=['GET', 'POST'])
+@loginRequired # === loginRequired(adminPanel)
+def adminPanel():
+    if request.method == "POST":
         # getting json file from adminPanel
         jsonFile = request.files.get("jsonFile")
         if jsonFile:
@@ -153,26 +150,30 @@ def adminLogin():
             # calling uploadQuestions() in functions.py 
             result = uploadQuestions(jsonData)   
             flash(result)
-        return render_template("adminPanel.html", username=session["username"])
-    
-    # if admin trying to login
-    if request.method == "POST":
-        username = request.form.get("username")
-        password = request.form.get("password")
-        admin = Admin.query.filter_by(
-            username=username, password=password).first()
-        if admin:
-            session['username'] = admin.username
-            return render_template("adminPanel.html", username=admin.username)
-        else:
-            flash('Invalid username or password')
-            return render_template("adminLogin.html")
+    return render_template("adminPanel.html", username=session["username"])
+
+
+# Admin Login Page [with session]
+@adminLoginBp.route('/admin/login/', methods=['GET', 'POST'])
+def adminLogin():
+    # if admin already in session 
+    if "username" in session:
+        return redirect('/admin/')
     else:
-        return render_template("adminLogin.html")
-
-
-    # except Exception:
-    #     abort(404)
+        # if admin trying to login
+        if request.method == "POST":
+            username = request.form.get("username")
+            password = request.form.get("password")
+            admin = Admin.query.filter_by(
+                username=username, password=password).first()
+            if admin:
+                session['username'] = admin.username
+                return redirect('/admin/')
+            else:
+                flash('Invalid username or password')
+                return render_template("adminLogin.html")
+        else:
+            return render_template("adminLogin.html")
 
 
 
