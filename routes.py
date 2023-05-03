@@ -32,7 +32,7 @@ def home():
     return render_template("home.html", context=context)
 
 
-# Quiz Page | 
+# Quiz Page 
 @quizBp.route('/<subject_slug>/<chapter_slug>/quiz/', methods=['GET', 'POST'])
 def quiz(subject_slug, chapter_slug):
 
@@ -142,34 +142,36 @@ def quizAnswersOnSubmit(subject_slug, chapter_slug):
 # Admin Login Page [with session]
 @adminLoginBp.route('/admin/', methods=['GET', 'POST'])
 def adminLogin():
-    try:
-        # if admin already in session 
-        if "username" in session:
-            # getting json file from adminPanel
-            jsonFile = request.files.get("jsonFile")
-            if jsonFile:
-                jsonData = json.load(jsonFile)
-                # calling uploadQuestions() in functions.py 
-                result = uploadQuestions(jsonData)   
-                flash(result)
-            return render_template("adminPanel.html", username=session["username"])
-
-        # if admin trying to login
-        if request.method == "POST":
-            username = request.form.get("username")
-            password = request.form.get("password")
-            admin = Admin.query.filter_by(
-                username=username, password=password).first()
-            if admin:
-                session['username'] = admin.username
-                return render_template("adminPanel.html", username=admin.username)
-            else:
-                flash('Invalid username or password')
-                return render_template("adminLogin.html")
+    # try:
+         # if admin already in session 
+    if "username" in session:
+        # getting json file from adminPanel
+        jsonFile = request.files.get("jsonFile")
+        if jsonFile:
+            jsonData = json.load(jsonFile)
+            # calling uploadQuestions() in functions.py 
+            result = uploadQuestions(jsonData)   
+            flash(result)
+        return render_template("adminPanel.html", username=session["username"])
+    
+    # if admin trying to login
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+        admin = Admin.query.filter_by(
+            username=username, password=password).first()
+        if admin:
+            session['username'] = admin.username
+            return render_template("adminPanel.html", username=admin.username)
         else:
+            flash('Invalid username or password')
             return render_template("adminLogin.html")
-    except Exception:
-        abort(404)
+    else:
+        return render_template("adminLogin.html")
+
+
+    # except Exception:
+    #     abort(404)
 
 
 
