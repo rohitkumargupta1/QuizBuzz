@@ -145,6 +145,7 @@ def adminLogin():
     # try:
          # if admin already in session 
     if "username" in session:
+        print("Session #############################")
         # getting json file from adminPanel
         jsonFile = request.files.get("jsonFile")
         if jsonFile:
