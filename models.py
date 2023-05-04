@@ -62,3 +62,16 @@ class Admin(db.Model):
     def __str__(self):
         return f"Admin('{self.username}')"
 
+
+
+# Contact Us Form Table 
+class ContactUsForm(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(30), nullable=False)
+    email = db.Column(db.String(30), nullable=False)
+    message = db.Column(db.String(60), nullable=False)
+    message_date = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+
+    def __str__(self):
+        return str(self.message)
+

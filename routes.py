@@ -139,6 +139,7 @@ def quizAnswersOnSubmit(subject_slug, chapter_slug):
     return render_template("quizAnswersOnSubmit.html", context=context)
 
 
+
 @adminPanelBp.route('/admin/', methods=['GET', 'POST'])
 @loginRequired # === loginRequired(adminPanel)
 def adminPanel():
@@ -151,6 +152,7 @@ def adminPanel():
             result = uploadQuestions(jsonData)   
             flash(result)
     return render_template("adminPanel.html", username=session["username"])
+
 
 
 # Admin Login Page [with session]
@@ -231,12 +233,43 @@ def updateAdmin():
                     flash("Your Profile updated successfully")
                     return redirect("/admin/")
                 else:
-                    flash("Your password and confirmation password do not match")
+                    flash("Your password and confirm password does not match!")
             return render_template("updateAdmin.html", username=username)
         else:
             return redirect("/admin/")
     except:
         return redirect("/admin/")
 
+
+
+
+
+# About Us
+@adminLogoutBp.route('/aboutUs/')
+def aboutUs():
+    return render_template("aboutUs.html")
+
+
+# Contact Us
+@adminLogoutBp.route('/contactUs/',methods=['GET', 'POST'])
+def contactUs():
+
+    if request.method=="POST":
+        name = request.form.get("name")
+        email = request.form.get("email")
+        message = request.form.get("message")
+
+        contactUsForm = ContactUsForm()
+        contactUsForm.name = name
+        contactUsForm.email = email
+        contactUsForm.message = message
+        db.session.add(contactUsForm)
+        db.session.commit()
+        flash("Thank You! for contacting us.")
+        return redirect("/contactUs/")
+
+
+
+    return render_template("contactUs.html")
 
 

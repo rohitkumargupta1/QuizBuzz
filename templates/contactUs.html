@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+
+{% block style %}
+<style>
+      h1:hover{
+           transform: scaleY(1.1);
+      }
+      .btn {
+			background-color: #2E2153;
+			color: #ffffff;
+		}
+
+      .btn:hover {
+            background-color: #ffffff;
+      }
+		
+
+</style>
+{% endblock style %}
+
+
+
+{% block body %}
+
+
+
+<div class="container mt-5 col-md-8">
+
+      <div class="jumbotron" style="background-color: #737FE1; color: #ffffff;">
+
+            {% with messages = get_flashed_messages() %}
+				{% if messages %}
+				<div class="flashes">
+					{% for message in messages %}
+					<div class="alert alert-success" role="alert">
+						<strong>{{message}}</strong>
+					</div>
+					{% endfor %}
+				</div>
+				{% endif %}
+				{% endwith %}
+
+                  <br>
+            
+                  <h1>Contact Us</h1>
+                  <p>Feel free to get in touch with us using the form below.</p>
+
+                  <form method="post"> 
+
+                    <div class="form-group">
+                      <label for="name">Name</label>
+                      <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" required>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="email">Email address</label>
+                      <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="message">Message</label>
+                      <textarea class="form-control" id="message" name="message" placeholder="Type your message here" rows="3" required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-block mb-4">Submit</button>
+                  </form>
+            
+                  
+      </div>
+
+</div>
+
+
+
+{% endblock body %}
+
+
+
+
+
+
+
+{% block script %}
+<script>
+
+
+</script>
+{% endblock script %}
